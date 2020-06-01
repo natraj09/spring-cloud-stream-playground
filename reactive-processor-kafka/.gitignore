@@ -1,0 +1,11 @@
+/.settings/
+/.project
+.idea
+*/.idea
+*.iml
+*/.factorypath
+target
+/.DS_Store
+models/
+site/
+*/**/cmake-build-debug

@@ -5,9 +5,11 @@ spring:
       bindings:
         testProcess-in-0:
           destination: rest-input
+          maxAttempts: 3
         testProcess-out-0:
           destination: rest-output
         testSink-in-0:
           destination: rest-output
         testSource-out-0:
           destination: rest-input
+
