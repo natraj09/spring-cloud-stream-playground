@@ -44,11 +44,12 @@ public class ReactiveProcessorApplication {
 	}
 
 	@Bean
-	public Function<Flux<Map>, Flux<Map>> testProcess() {
+	public Function<Flux<Message<Map>>, Flux<Message<Map>>> testProcess() {
 		return inbound -> inbound.
 				log()
 				.flatMap(data -> {
-					if(data.get("error")!=null){
+					System.out.println("Headers = " + data.getHeaders().keySet());
+					if(data.getPayload().get("error")!=null){
 						log.info("inside error");
 						return Mono.error(new RuntimeException(data.toString()));
 					} else {

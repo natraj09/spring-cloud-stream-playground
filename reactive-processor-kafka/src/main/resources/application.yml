@@ -4,12 +4,17 @@ spring:
       function.definition: testProcess;testSource;testSink
       bindings:
         testProcess-in-0:
-          destination: rest-input
-          maxAttempts: 3
+          destination: rest-input,error.rest-input.input-group
+          group: input-group
+          consumer:
+            maxAttempts: 1
+            enableDlq: true
+            #dlqName: error.rest-input
         testProcess-out-0:
           destination: rest-output
         testSink-in-0:
           destination: rest-output
+          group: sink-group
         testSource-out-0:
           destination: rest-input
 
