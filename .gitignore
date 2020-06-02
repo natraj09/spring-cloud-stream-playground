@@ -1,11 +1,11 @@
 /.settings/
 /.project
 .idea
-*/.idea
+.idea/.
+reactive-processor-kafka/.idea/
 *.iml
 */.factorypath
-target
+reactive-processor-kafka/target/
 /.DS_Store
-models/
-site/
-*/**/cmake-build-debug
+*.class
+

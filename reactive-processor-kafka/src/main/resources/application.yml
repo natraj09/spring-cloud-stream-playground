@@ -4,12 +4,9 @@ spring:
       function.definition: testProcess;testSource;testSink
       bindings:
         testProcess-in-0:
-          destination: rest-input,error.rest-input.input-group
+          destination: rest-input,rest-input-error
           group: input-group
-          consumer:
-            maxAttempts: 1
-            enableDlq: true
-            #dlqName: error.rest-input
+          maxAttempts: 1
         testProcess-out-0:
           destination: rest-output
         testSink-in-0:
@@ -17,4 +14,10 @@ spring:
           group: sink-group
         testSource-out-0:
           destination: rest-input
+      kafka:
+        bindings:
+          testProcess-in-0:
+            consumer:
+              enableDlq: true
+              dlqName: rest-input-error
 
