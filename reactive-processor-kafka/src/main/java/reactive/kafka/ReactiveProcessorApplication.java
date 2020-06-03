@@ -85,24 +85,24 @@ public class ReactiveProcessorApplication {
 
 
 	@Bean
-	public Function<Flux<Message<Map>>, Flux<Message<Map>>> testError() {
-		return data -> data.flatMap(inbound -> {
+	public Function<Message<Map>, Message<Map>> testError() {
+		return inbound -> {
 			try {
 				restTemplate.build().getForObject(inbound.getPayload().get("url").toString(), String.class);
-				return Mono.just(MessageBuilder.fromMessage(inbound).build());
+				return MessageBuilder.fromMessage(inbound).build();
 			} catch (Exception e) {
 				Integer retries = inbound.getHeaders().get(X_RETRIES_HEADER, Integer.class);
-				if (retries < 2) {
-					return Mono.just(MessageBuilder.fromMessage(inbound)
+				if (retries <= 2) {
+					return MessageBuilder.fromMessage(inbound)
 							.setHeader(X_RETRIES_HEADER, new Integer(retries + 1))
-							.setHeader("spring.cloud.stream.sendto.destination", "rest-input-error").build());
+							.setHeader("spring.cloud.stream.sendto.destination", "rest-input-error").build();
 				}
 				// Handle retries < N
 				else {
-					return Mono.just(MessageBuilder.fromMessage(inbound).build());
+					return MessageBuilder.fromMessage(inbound).setHeader("spring.cloud.stream.sendto.destination", "rest-output").build();
 				}
 			}
-		});
+		};
 	}
 
 

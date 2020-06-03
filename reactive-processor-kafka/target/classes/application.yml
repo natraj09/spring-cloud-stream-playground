@@ -1,13 +1,23 @@
 spring:
   cloud:
     stream:
-      function.definition: testProcess;testSource;testSink
+      function:
+        definition: testSource;testProcess;testError;testSink
+        routing:
+          enabled: true
       bindings:
+        testSource-out-0:
+          destination: rest-input
         testProcess-in-0:
           destination: rest-input
-        testProcess-out-0:
+          group: input-group
+          max-attempts: 1
+        testError-in-0:
+          destination: rest-input-error
+          group: input-error-group
+        testError-out-0:
           destination: rest-output
         testSink-in-0:
           destination: rest-output
-        testSource-out-0:
-          destination: rest-input
+          group: sink-group
+
